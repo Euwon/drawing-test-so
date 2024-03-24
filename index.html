@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="initial-scale=0.66, user-scalable=no">
+  <title>Document</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<META name="viewport" content="initial-scale=0.66, user-scalable=no">
+<body>
+  <div id="colorButtonBox">
+    <div id="colorButton" class="black" onclick='changeColorAndSize("black",10)'></div>
+    <div id="colorButton" class="red" onclick="changeColorAndSize('red',10)"></div>
+    <div id="colorButton" class="green" onclick="changeColorAndSize('green',10)"></div>
+    <div id="colorButton" class="blue" onclick="changeColorAndSize('blue',10)"></div>
+    <div id="colorButton" class="yellow" onclick="changeColorAndSize('yellow',10)"></div>
+    <div id="eraserButton" onclick="changeColorAndSize('white',100)"></div>
+  </div>
+  
+  <canvas id="canvas"></canvas>
+  <script src="script.js"></script>
+</body>
