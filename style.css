@@ -5,6 +5,7 @@ canvas {
 
 
 body{
+  overflow: hidden; /* Prevents scrolling on the page level */  
   margin:0;
   padding:0;
 }
