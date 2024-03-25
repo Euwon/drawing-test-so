@@ -1,3 +1,9 @@
+/* Changes cursor */
+canvas {
+    cursor: crosshair;
+}
+
+
 body{
   margin:0;
   padding:0;
