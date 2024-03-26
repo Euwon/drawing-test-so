@@ -1,11 +1,11 @@
-/* Changes cursor */
+
 canvas {
-    cursor: crosshair;
+    cursor: crosshair; /* Changes cursor to cross */
 }
 
 
 body{
-  overflow: hidden; /* Prevents scrolling on the page level */  
+  overflow: hidden; /* Prevents scrolling on the page level */	
   margin:0;
   padding:0;
 }
@@ -64,4 +64,71 @@ body{
 }
 .yellow {
   background:yellow;
+}
+
+
+body, html {
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* Prevents scrolling caused by resizing the canvas */
+}
+
+#canvasContainer {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+}
+
+canvas {
+  display: block;
+  background-color: #fff;
+  width: 100%;
+  height: 100%;
+}
+
+#downloadBtn, #formatSelect {
+  background-color: #007bff; /* Blue background for both */
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 20px;
+}
+
+#downloadBtn:hover, #formatSelect:hover {
+  background-color: #0069d9;
+}
+
+#downloadBtn, #formatSelectWrapper {
+  position: absolute;
+  top: 10px;
+}
+
+#downloadBtn {
+  right: 10px;
+}
+
+#formatSelectWrapper {
+  right: 110px;
+  display: inline-block;
+}
+
+#formatSelectWrapper:after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+  border: 5px solid transparent;
+  border-top-color: white;
+  pointer-events: none;
+}
+
+#formatSelect {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  padding-right: 30px; /* Make room for the custom dropdown arrow */
 }
