@@ -1,66 +1,96 @@
+// Initialize canvas, context, and default drawing settings
 let color = "black";
 let strokeSize = 10;
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
 
-function changeColorAndSize(data, width) {
-  color = data;
-  strokeSize = width;
-}
-window.addEventListener("load", () => {
-  const canvas = document.querySelector("#canvas");
-  const ctx = canvas.getContext("2d");
-
-  //resizing
-  canvas.height = window.innerHeight;
+// Function to resize and initialize the canvas with a white background
+function resizeCanvas() {
   canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight; // Adjust based on your button size and spacing
+  ctx.fillStyle = 'white'; // Set the fill style to white
+  ctx.fillRect(0, 0, canvas.width, canvas.height); // Fill the canvas with white
+}
 
-  //variables
-  let painting = false;
+// Call resizeCanvas on load and resize
+window.addEventListener('load', resizeCanvas);
+window.addEventListener('resize', resizeCanvas);
 
-  //functions
-  function startPosition(e) {
-    painting = true;
-    draw(e);
+// Function to change the current drawing color and size
+function changeColorAndSize(selectedColor, selectedStrokeSize) {
+  color = selectedColor;
+  strokeSize = selectedStrokeSize;
+}
+
+// Set up drawing state and event listeners
+let painting = false;
+
+function startPosition(e) {
+  // Check if the mouse event is a right-click (button code 2); if so, return early
+  if (e.button === 2|| e.button === 1) return;
+  
+  painting = true;
+  draw(e);
+}
+
+function finishedPosition() {
+  painting = false;
+  ctx.beginPath();
+}
+
+function draw(e) {
+  if (!painting) return;
+  ctx.lineWidth = strokeSize;
+  ctx.lineCap = 'round';
+  ctx.strokeStyle = color;
+
+  // Prevent the default action to avoid potential scrolling and other behaviors
+  e.preventDefault();
+
+  let x, y;
+  if (e.type === 'mousemove') {
+    x = e.clientX;
+    y = e.clientY;
+  } else if (e.type === 'touchmove') {
+    x = e.touches[0].clientX;
+    y = e.touches[0].clientY;
+  } else {
+    return; // If the event type is not supported, exit the function
   }
 
-  function endPosition() {
-    painting = false;
-    ctx.beginPath();
-  }
+  // Get the mouse position relative to the canvas
+  const rect = canvas.getBoundingClientRect();
+  x -= rect.left;
+  y -= rect.top;
 
-  function draw(e) {
-    if (!painting) {
-      return;
-    }
-    
-    e.preventDefault();
-    ctx.lineWidth = strokeSize;
-    ctx.lineCap = "round";
- 
-    // ctx.lineTo(e.clientX, e.clientY);
-    if (e.type == 'touchmove'){
-      ctx.lineTo(e.touches[0].clientX, e.touches[0].clientY);
-    } else if (e.type == 'mousemove'){
-      ctx.lineTo(e.clientX, e.clientY);
-    }
-      
-    ctx.stroke();
-    ctx.strokeStyle = color;
-    ctx.beginPath();
-    
-    // ctx.moveTo(e.clientX, e.clientY);
-    if (e.type == 'touchmove'){
-      ctx.moveTo(e.touches[0].clientX, e.touches[0].clientY);
-    } else if (e.type == 'mousemove'){
-      ctx.moveTo(e.clientX, e.clientY);
-    }
-  }
+  ctx.lineTo(x, y);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+}
 
-  //event listeners
-  canvas.addEventListener("mousedown", startPosition);
-  canvas.addEventListener("touchstart", startPosition);
-  canvas.addEventListener("mouseup", endPosition);
-  canvas.addEventListener("touchend", endPosition);
-  canvas.addEventListener("mousemove", draw);
-  canvas.addEventListener("touchmove", draw);
+// Prevent right-click context menu on the canvas
+canvas.addEventListener('contextmenu', function(e) {
+  e.preventDefault();
 });
 
+// Add mouse event listeners
+canvas.addEventListener('mousedown', startPosition);
+canvas.addEventListener('mouseup', finishedPosition);
+canvas.addEventListener('mousemove', draw);
+
+// Add touch event listeners
+canvas.addEventListener('touchstart', startPosition);
+canvas.addEventListener('touchend', finishedPosition);
+canvas.addEventListener('touchmove', draw, { passive: false });
+
+// Download button event listener
+document.getElementById('downloadBtn').addEventListener('click', function() {
+  const format = document.getElementById('formatSelect').value;
+  const fileNameExtension = format.split('/')[1];
+  const image = canvas.toDataURL(format);
+  const link = document.createElement('a');
+  link.download = `myDrawing.${fileNameExtension}`;
+  link.href = image;
+  link.click();
+});
